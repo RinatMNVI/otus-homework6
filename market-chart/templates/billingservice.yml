@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billingservice-deployment
+spec:
+  replicas: {{ .Values.billingservice.replicaCount }}
+  selector:
+    matchLabels:
+      app: billingservice-app
+  template:
+    metadata:
+      labels:
+        app: billingservice-app
+    spec:
+      containers:
+        - name: billingservice
+          image: {{ .Values.billingservice.image }}
+          env:
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: market-config
+                  key: DB_URL
+            - name: DB_SCHEMA
+              valueFrom:
+                configMapKeyRef:
+                  name: market-config
+                  key: DB_SCHEMA
+            - name: KAFKA_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: market-config
+                  key: KAFKA_HOST
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: market-config-secret
+                  key: DB_USER
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: market-config-secret
+                  key: DB_PASS
+          ports:
+            - containerPort: {{ .Values.billingservice.service.port }}
+              name: web
+          imagePullPolicy: IfNotPresent
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: billingservice
+spec:
+  selector:
+    app: billingservice-app
+  ports:
+    - protocol: TCP
+      port: {{ .Values.billingservice.service.port }}
+      targetPort: web
+      name: web
+  type: {{ .Values.billingservice.service.type }}
+

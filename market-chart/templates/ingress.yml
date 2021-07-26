@@ -1,0 +1,48 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: market-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: arch.homework
+      http:
+        paths:
+          - path: /user
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service
+                port:
+                  name: web
+    - host: arch.homework
+      http:
+        paths:
+            - path: /account
+              pathType: Prefix
+              backend:
+                service:
+                  name: billingservice
+                  port:
+                    name: web
+    - host: arch.homework
+      http:
+        paths:
+            - path: /notification
+              pathType: Prefix
+              backend:
+                service:
+                  name: notification
+                  port:
+                    name: web
+    - host: arch.homework
+      http:
+        paths:
+            - path: /order
+              pathType: Prefix
+              backend:
+                service:
+                  name: orderservice
+                  port:
+                    name: web

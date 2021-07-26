@@ -1,0 +1,6 @@
+fullnameOverride: postgres
+postgresqlUsername: postgres
+postgresqlPassword: postgres
+postgresqlDatabase: market
+persistence:
+  enabled: false

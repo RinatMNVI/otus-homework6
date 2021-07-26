@@ -1,0 +1,38 @@
+host: arch.homework
+
+billingservice:
+  image: rinatm/billingservice:v1
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    port: 8080
+
+notification:
+  image: rinatm/notification:v1
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    port: 8080
+
+orderservice:
+  image: rinatm/orderservice:v1
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    port: 8080
+
+userservice:
+  image: rinatm/userservice:v6
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    port: 8080
+
+db:
+  schema: public
+  url: jdbc:postgresql://postgres/market
+  username: postgres
+  password: postgres
+
+kafka:
+  host: kafka.default.svc.cluster.local:9092
